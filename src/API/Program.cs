@@ -1,3 +1,4 @@
+using API.Middleware;
 using API.ServiceCollectionExtensions;
 using Business;
 using Data;
@@ -28,5 +29,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<LoggingAndErrorHandling>();
 
 app.Run();
