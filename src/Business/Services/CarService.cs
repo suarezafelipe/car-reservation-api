@@ -12,8 +12,15 @@ public class CarService : ICarService
         _carRepository = carRepository;
     }
     
-    public async Task<Car> CreateCar(Car car)
+    public async Task<Car> CreateCarAsync(Car car)
     {
-        return await _carRepository.CreateCar(car);
+        car.Id = Guid.NewGuid();
+        return await _carRepository.CreateCarAsync(car);
+    }
+
+    public bool IsUniqueIdentifierUnique(string uniqueIdentifier)
+    {
+        var carWithSameIdentifier = _carRepository.GetCarByUniqueIdentifier(uniqueIdentifier);
+        return carWithSameIdentifier is null;
     }
 }

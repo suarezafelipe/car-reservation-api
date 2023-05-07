@@ -4,5 +4,7 @@ namespace Business.Interfaces;
 
 public interface ICarRepository
 {
-    Task<Car> CreateCar(Car car);
+    Task<Car> CreateCarAsync(Car car);
+    
+    Car? GetCarByUniqueIdentifier(string uniqueIdentifier);
 }

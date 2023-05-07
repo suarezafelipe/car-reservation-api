@@ -12,7 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddData()
     .AddBusiness()
-    .AddApiVersioningService();
+    .AddApiVersioningService()
+    .AddFluentValidation();
 
 var app = builder.Build();
 

@@ -19,7 +19,7 @@ public class CarController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post(Car newCar)
     {
-        Car createdCar = await _carService.CreateCar(newCar);
+        var createdCar = await _carService.CreateCarAsync(newCar);
         return Created($"/api/v1/car/{newCar.Id}", createdCar);
     }
 }

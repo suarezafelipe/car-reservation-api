@@ -4,5 +4,7 @@ namespace Business.Interfaces;
 
 public interface ICarService
 {
-    Task<Car> CreateCar(Car car);
+    Task<Car> CreateCarAsync(Car car);
+    
+    bool IsUniqueIdentifierUnique(string uniqueIdentifier);
 }

@@ -12,10 +12,13 @@ public class CarRepository : ICarRepository
         _context = context;
     }
     
-    public async Task<Car> CreateCar(Car car)
+    public async Task<Car> CreateCarAsync(Car car)
     {
         _context.Cars.Add(car);
         await _context.SaveChangesAsync();
         return car;
     }
+
+    public Car? GetCarByUniqueIdentifier(string uniqueIdentifier) 
+        => _context.Cars.FirstOrDefault(c => c.UniqueIdentifier == uniqueIdentifier);
 }
