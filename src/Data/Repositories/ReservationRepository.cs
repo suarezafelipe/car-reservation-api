@@ -26,8 +26,8 @@ public class ReservationRepository : IReservationRepository
 
     public async Task<IEnumerable<Car>> GetAvailableCarsAsync(DateTime startDate, DateTime endDate)
     {
-        var availableCars = await (from car in _context.Cars
-            join reservation in _context.Reservations
+        var availableCars = await (from car in _context.Cars.AsNoTracking()
+            join reservation in _context.Reservations.AsNoTracking()
                 on car.Id equals reservation.CarId into carReservations
             from carReservation in carReservations.DefaultIfEmpty()
             where carReservation == null

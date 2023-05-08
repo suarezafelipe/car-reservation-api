@@ -16,8 +16,7 @@ public class ReservationService : IReservationService
 
     public async Task<IEnumerable<Reservation>> GetAllAsync() => await _reservationRepository.GetAllAsync();
     
-
-    public async Task<OperationResult<ReservationResponse>> CreateReservationAsync(ReservationRequest reservationRequest)
+    public async Task<Result<ReservationResponse>> CreateReservationAsync(ReservationRequest reservationRequest)
     {
         var reservation = CreateReservationFromRequest(reservationRequest);
         var availableCars = await GetAvailableCarsAsync(reservation.ReservationStart, reservation.ReservationEnd);
@@ -25,15 +24,14 @@ public class ReservationService : IReservationService
 
         if (reservedCar == null)
         {
-            return OperationResult<ReservationResponse>.FailureResult("No cars available for the selected dates.");
+            return Result<ReservationResponse>.FailureResult("No cars available for the selected dates.");
         }
 
         await SaveReservationAsync(reservation, reservedCar);
         var reservationResponse = CreateReservationResponse(reservation, reservedCar);
 
-        return OperationResult<ReservationResponse>.SuccessResult(reservationResponse);
+        return Result<ReservationResponse>.SuccessResult(reservationResponse);
     }
-
 
     private Reservation CreateReservationFromRequest(ReservationRequest reservationRequest)
     {
@@ -58,7 +56,7 @@ public class ReservationService : IReservationService
         await _reservationRepository.CreateReservationAsync(reservation);
     }
 
-    private ReservationResponse CreateReservationResponse(Reservation reservation, Car reservedCar)
+    private static ReservationResponse CreateReservationResponse(Reservation reservation, Car reservedCar)
     {
         return new ReservationResponse
         {

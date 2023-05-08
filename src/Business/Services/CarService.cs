@@ -1,5 +1,5 @@
-﻿using Business.Exceptions;
-using Business.Interfaces;
+﻿using Business.Interfaces;
+using Business.Models;
 using Business.Models.Entities;
 
 namespace Business.Services;
@@ -29,42 +29,49 @@ public class CarService : ICarService
     
     public async Task<IEnumerable<Car>> GetAllAsync() => await _carRepository.GetAllAsync();
     
-    public async Task UpdateAsync(Car carToUpdate)
+    public async Task<Result<bool>> UpdateAsync(Car carToUpdate)
     {
         var existingCar = await GetByIdAsync(carToUpdate.Id);
-        
+    
         if (existingCar == null)
         {
-            throw new CarNotFoundException($"Car with id: {carToUpdate.Id} was not found!");
+            return Result<bool>.FailureResult($"Car with id: {carToUpdate.Id} was not found!");
         }
 
-        if (!string.IsNullOrEmpty(carToUpdate.Make))
-        {
-            existingCar.Make = carToUpdate.Make;
-        }
-
-        if (!string.IsNullOrEmpty(carToUpdate.Model))
-        {
-            existingCar.Model = carToUpdate.Model;
-        }
-        
-        if (!string.IsNullOrEmpty(carToUpdate.UniqueIdentifier))
-        {
-            existingCar.UniqueIdentifier = carToUpdate.UniqueIdentifier;
-        }
-        
+        UpdateCarProperties(existingCar, carToUpdate);
+    
         await _carRepository.UpdateAsync(existingCar);
+        return Result<bool>.SuccessResult(true);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<Result<bool>> DeleteAsync(Guid id)
     {
         var carToDelete = await GetByIdAsync(id);
-        
+    
         if (carToDelete == null)
         {
-            throw new CarNotFoundException($"Car with id: {id} was not found!");
+            return Result<bool>.FailureResult($"Car with id: {id} was not found!");
         }
-        
+    
         await _carRepository.DeleteAsync(carToDelete);
+        return Result<bool>.SuccessResult(true);
+    }
+    
+    private static void UpdateCarProperties(Car existingCar, Car updatedCar)
+    {
+        if (!string.IsNullOrEmpty(updatedCar.Make))
+        {
+            existingCar.Make = updatedCar.Make;
+        }
+
+        if (!string.IsNullOrEmpty(updatedCar.Model))
+        {
+            existingCar.Model = updatedCar.Model;
+        }
+    
+        if (!string.IsNullOrEmpty(updatedCar.UniqueIdentifier))
+        {
+            existingCar.UniqueIdentifier = updatedCar.UniqueIdentifier;
+        }
     }
 }

@@ -8,5 +8,5 @@ public interface IReservationService
 {
     Task<IEnumerable<Reservation>> GetAllAsync();
     
-    Task<OperationResult<ReservationResponse>> CreateReservationAsync(ReservationRequest reservation);
+    Task<Result<ReservationResponse>> CreateReservationAsync(ReservationRequest reservation);
 }

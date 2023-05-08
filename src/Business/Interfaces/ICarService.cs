@@ -1,4 +1,5 @@
-﻿using Business.Models.Entities;
+﻿using Business.Models;
+using Business.Models.Entities;
 
 namespace Business.Interfaces;
 
@@ -11,8 +12,8 @@ public interface ICarService
     Task<Car?> GetByIdAsync(Guid parsedId);
     
     Task<IEnumerable<Car>> GetAllAsync();
-    
-    Task UpdateAsync(Car carToUpdate);
-    
-    Task DeleteAsync(Guid id);
+
+    Task<Result<bool>> UpdateAsync(Car carToUpdate);
+
+    Task<Result<bool>> DeleteAsync(Guid id);
 }

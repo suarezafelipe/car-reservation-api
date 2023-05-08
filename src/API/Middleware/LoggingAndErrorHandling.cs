@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Business.Exceptions;
 
 namespace API.Middleware;
 
@@ -25,10 +24,6 @@ public class LoggingAndErrorHandling
             await _next(context);
             _logger.LogInformation("Response (CorrelationID: {CorrelationId}): {StatusCode}", correlationId, context.Response.StatusCode);
         }
-        catch (CarNotFoundException ex)
-        {
-            await HandleCarNotFoundExceptionAsync(context, correlationId, ex);
-        }
         catch (Exception ex)
         {
             await HandleUnhandledExceptionAsync(context, correlationId, ex);
@@ -45,23 +40,6 @@ public class LoggingAndErrorHandling
     {
         _logger.LogInformation("Request (CorrelationID: {CorrelationId}): {RequestMethod} {RequestPath}",
             correlationId, context.Request.Method, context.Request.Path);
-    }
-
-    private async Task HandleCarNotFoundExceptionAsync(HttpContext context, string correlationId, CarNotFoundException ex)
-    {
-        _logger.LogError(ex, "A GUID was not found in the database");
-
-        context.Response.Clear();
-        context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-        context.Response.ContentType = "application/json";
-
-        var errorResponse = new
-        {
-            ex.Message,
-            CorrelationId = correlationId
-        };
-
-        await context.Response.WriteAsJsonAsync(errorResponse);
     }
 
     private async Task HandleUnhandledExceptionAsync(HttpContext context, string correlationId, Exception ex)

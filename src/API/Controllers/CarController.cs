@@ -51,8 +51,11 @@ public class CarController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Put(Car carToUpdate)
     {
-        await _carService.UpdateAsync(carToUpdate);
-        return Ok(carToUpdate);
+        var updateResult = await _carService.UpdateAsync(carToUpdate);
+        
+        return updateResult.Success
+            ? Ok(carToUpdate)
+            : Conflict(new { message = updateResult.Message });
     }
     
     [HttpDelete("{id}")]
@@ -60,10 +63,13 @@ public class CarController : ControllerBase
     {
         if (!Guid.TryParse(id, out Guid parsedId))
         {
-            return BadRequest("The input is not a valid Unique Identifier");
+            return BadRequest(new { message = "The input is not a valid Unique Identifier" });
         }
         
-        await _carService.DeleteAsync(parsedId);
-        return Ok();
+        var deleteResult = await _carService.DeleteAsync(parsedId);
+
+        return deleteResult.Success
+            ? Ok()
+            : Conflict(new { message = deleteResult.Message });
     }
 }
