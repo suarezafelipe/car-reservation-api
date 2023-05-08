@@ -16,7 +16,7 @@ The Car Reservation API allows users to manage and reserve cars for upcoming rid
 
 ## Overview
 
-This application provides a simple and efficient way to reserve cars for upcoming rides. Users can manage the cars in the system, represented by their make, model, and unique identifier following the pattern "C<number>". Reservations can be made up to 24 hours in advance, with a maximum duration of 2 hours. The system will find an available car, store the reservation if possible, and return a response with the details.
+This application provides a simple and efficient way to reserve cars for upcoming rides. Users can manage the cars in the system, represented by their make, model, and unique identifier following the pattern "C-number-". Reservations can be made up to 24 hours in advance, with a maximum duration of 2 hours. The system will find an available car, store the reservation if possible, and return a response with the details.
 
 ## API Versioning
 
