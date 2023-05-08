@@ -1,4 +1,5 @@
 ﻿using Business.Interfaces;
+using Business.Models;
 using Business.Models.Dtos;
 using Business.Models.Entities;
 
@@ -16,32 +17,49 @@ public class ReservationService : IReservationService
     public async Task<IEnumerable<Reservation>> GetAllAsync() => await _reservationRepository.GetAllAsync();
     
 
-    public async Task<ReservationResponse> CreateReservationAsync(ReservationRequest reservationRequest)
+    public async Task<OperationResult<ReservationResponse>> CreateReservationAsync(ReservationRequest reservationRequest)
     {
-        var reservation = new Reservation
+        var reservation = CreateReservationFromRequest(reservationRequest);
+        var availableCars = await GetAvailableCarsAsync(reservation.ReservationStart, reservation.ReservationEnd);
+        var reservedCar = availableCars.FirstOrDefault();
+
+        if (reservedCar == null)
+        {
+            return OperationResult<ReservationResponse>.FailureResult("No cars available for the selected dates.");
+        }
+
+        await SaveReservationAsync(reservation, reservedCar);
+        var reservationResponse = CreateReservationResponse(reservation, reservedCar);
+
+        return OperationResult<ReservationResponse>.SuccessResult(reservationResponse);
+    }
+
+
+    private Reservation CreateReservationFromRequest(ReservationRequest reservationRequest)
+    {
+        return new Reservation
         {
             ReservationStart = reservationRequest.StartDate,
             DurationInMinutes = reservationRequest.DurationInMinutes,
             ReservationEnd = reservationRequest.StartDate.AddMinutes(reservationRequest.DurationInMinutes)
         };
+    }
 
-        var availableCars = await _reservationRepository.GetAvailableCarsAsync(reservation.ReservationStart, reservation.ReservationEnd);
+    private async Task<IEnumerable<Car>> GetAvailableCarsAsync(DateTime reservationStart, DateTime reservationEnd)
+    {
+        var availableCars = await _reservationRepository.GetAvailableCarsAsync(reservationStart, reservationEnd);
+        return availableCars.ToList();
+    }
 
-        var availableCarsList = availableCars.ToList();
-        
-        if (!availableCarsList.Any())
-        {
-            throw new Exception("No cars available for the selected dates.");
-        }
-        
-        // Take the first available car. At this point we've already validated that there is at least one available car.
-        var reservedCar = availableCarsList.First();
-        
-        // Add that car to the reservation. and store a new the reservation in the DB
+    private async Task SaveReservationAsync(Reservation reservation, Car reservedCar)
+    {
         reservation.CarId = reservedCar.Id;
         reservation.Id = Guid.NewGuid();
         await _reservationRepository.CreateReservationAsync(reservation);
+    }
 
+    private ReservationResponse CreateReservationResponse(Reservation reservation, Car reservedCar)
+    {
         return new ReservationResponse
         {
             ReservationId = reservation.Id,

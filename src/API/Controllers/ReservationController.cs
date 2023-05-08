@@ -1,6 +1,5 @@
 ﻿using Business.Interfaces;
 using Business.Models.Dtos;
-using Business.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -30,7 +29,10 @@ public class ReservationController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post(ReservationRequest newReservation)
     {
-        var reservationDetails = await _reservationService.CreateReservationAsync(newReservation);
-        return Created($"/api/v1/reservation/{reservationDetails.ReservationId}", reservationDetails);
+        var reservationResult = await _reservationService.CreateReservationAsync(newReservation);
+
+        return reservationResult.Success 
+            ? Created($"/api/v1/reservation/{reservationResult.Data?.ReservationId}", reservationResult.Data)
+            : Conflict(new { message = reservationResult.Message });
     }
 }
