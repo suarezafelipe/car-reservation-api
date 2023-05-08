@@ -1,6 +1,6 @@
-﻿using Business.Entities;
-using Business.Exceptions;
+﻿using Business.Exceptions;
 using Business.Interfaces;
+using Business.Models.Entities;
 
 namespace Business.Services;
 

@@ -1,4 +1,4 @@
-﻿namespace Business.Entities;
+﻿namespace Business.Models.Entities;
 
 public class Car
 {

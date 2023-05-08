@@ -1,5 +1,5 @@
-﻿using Business.Entities;
-using Business.Interfaces;
+﻿using Business.Interfaces;
+using Business.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;

@@ -15,6 +15,7 @@ public static class DependencyInjection
             options.UseInMemoryDatabase(uniqueDatabaseName));
 
         services.AddScoped<ICarRepository, CarRepository>();
+        services.AddScoped<IReservationRepository, ReservationRepository>();
         
         return services;
     }

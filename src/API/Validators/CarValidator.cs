@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using Business.Entities;
 using Business.Interfaces;
+using Business.Models.Entities;
 
 namespace API.Validators
 {

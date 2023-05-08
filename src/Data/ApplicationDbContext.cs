@@ -1,4 +1,4 @@
-﻿using Business.Entities;
+﻿using Business.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data;
@@ -10,4 +10,6 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<Car> Cars { get; set; } = null!;
+    
+    public DbSet<Reservation> Reservations { get; set; } = null!;
 }
