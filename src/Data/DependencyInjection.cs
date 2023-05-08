@@ -1,10 +1,12 @@
-﻿using Business.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
+using Business.Interfaces;
 using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Data;
 
+[ExcludeFromCodeCoverage]
 public static class DependencyInjection
 {
     public static IServiceCollection AddData(this IServiceCollection services)

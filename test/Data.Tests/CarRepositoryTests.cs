@@ -25,7 +25,7 @@ public class CarRepositoryTests
     {
         // Arrange
         await using var context = CreateUniqueContext();
-        var testCar = new Car { Id = Guid.NewGuid(), Make = "Toyota", Model = "Camry", UniqueIdentifier = "123456" };
+        var testCar = new Car { Id = Guid.NewGuid(), Make = "Toyota", Model = "Camry", UniqueIdentifier = "C123456" };
         context.Cars.Add(testCar);
         await context.SaveChangesAsync();
 
@@ -58,8 +58,8 @@ public class CarRepositoryTests
     {
         // Arrange
         await using var context = CreateUniqueContext();
-        var testCar1 = new Car { Id = Guid.NewGuid(), Make = "Toyota", Model = "Camry", UniqueIdentifier = "123456" };
-        var testCar2 = new Car { Id = Guid.NewGuid(), Make = "Honda", Model = "Civic", UniqueIdentifier = "789012" };
+        var testCar1 = new Car { Id = Guid.NewGuid(), Make = "Toyota", Model = "Camry", UniqueIdentifier = "C123456" };
+        var testCar2 = new Car { Id = Guid.NewGuid(), Make = "Honda", Model = "Civic", UniqueIdentifier = "C789012" };
         context.Cars.Add(testCar1);
         context.Cars.Add(testCar2);
         await context.SaveChangesAsync();
