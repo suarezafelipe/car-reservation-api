@@ -13,10 +13,7 @@ public class ReservationRepository : IReservationRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Reservation>> GetAllAsync()
-    {
-        return await _context.Reservations.ToListAsync();
-    }
+    public async Task<IEnumerable<Reservation>> GetAllAsync() => await _context.Reservations.ToListAsync();
 
     public async Task CreateReservationAsync(Reservation newReservation)
     {

@@ -18,7 +18,7 @@ namespace API.Validators
                 .WithMessage("The duration of your reservation must be between 1 and 120 minutes.");
         }
 
-        private bool BeWithinNext24Hours(DateTime startDate)
+        private static bool BeWithinNext24Hours(DateTime startDate)
         {
             var now = DateTime.UtcNow;
             var maxAllowedDate = now.AddHours(24);
