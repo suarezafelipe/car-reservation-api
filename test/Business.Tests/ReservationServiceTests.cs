@@ -84,6 +84,7 @@ public class ReservationServiceTests
             StartDate = DateTime.UtcNow,
             DurationInMinutes = 60
         };
+        // ReSharper disable once CollectionNeverUpdated.Local
         var availableCars = new List<Car>();
 
         _reservationRepositoryMock.Setup(repo => repo.GetAvailableCarsAsync(It.IsAny<DateTime>(), It.IsAny<DateTime>())).ReturnsAsync(availableCars);
